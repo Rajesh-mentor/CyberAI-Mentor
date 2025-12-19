@@ -2,40 +2,39 @@ import streamlit as st
 from groq import Groq
 
 # API Key configuration
-# Replace with your actual key
-client = Groq(api_key="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")
+# Enter your actual Groq API Key (gsk_...) below
+client = Groq(api_key="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")
 
 st.title("CyberAI Mentor 🛡️")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Display chat history from session state
+# Display chat history from the session state
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# React to user input
+# Handling user input
 if prompt := st.chat_input("Ask your cybersecurity doubts here..."):
-    # Display user message in chat message container
-    st.chat_message("user").markdown(prompt)
-    # Add user message to chat history
+    # Adding user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
 
     try:
         with st.chat_message("assistant"):
-            # Prepare the message list correctly for the API
+            # Using the latest model: llama-3.1-8b-instant
             chat_completion = client.chat.completions.create(
-                model="llama3-8b-8192",
+                model="llama-3.1-8b-instant",
                 messages=[
                     {"role": m["role"], "content": m["content"]}
                     for m in st.session_state.messages
                 ]
             )
-            response = chat_completion.choices[0].message.content
-            st.markdown(response)
-            # Add assistant response to chat history
-            st.session_state.messages.append({"role": "assistant", "content": response})
+            reply = chat_completion.choices[0].message.content
+            st.markdown(reply)
+            # Adding assistant response to chat history
+            st.session_state.messages.append({"role": "assistant", "content": reply})
     except Exception as e:
-        st.error(f"An error occurred: {str(e)}")
-
+        st.error(f"Error: {e}")
