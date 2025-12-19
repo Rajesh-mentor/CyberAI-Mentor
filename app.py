@@ -1,53 +1,28 @@
 import streamlit as st
-import ollama
+from groq import Groq
 
-# 1. Page Configuration (This must be the first Streamlit command)
-st.set_page_config(page_title="CyberAI Mentor", page_icon="🛡️")
+# Set up API Key (You can get this for free from groq.com)
+client = Groq(api_key="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")
 
-# 2. Sidebar Section
-with st.sidebar:
-    st.title("🛡️ CyberAI Mentor")
-    st.info("Hello! I am your Cyber Security Mentor. Developed by [Rajesh Chandrasekhar].")
-    st.markdown("---")
-    st.write("🎯 Goal: Defensive Security Learning")
-    st.success("🔒 Local & Secure")
+st.title("CyberAI Mentor 🛡️")
 
-# 3. Main Interface Title
-st.title("🛡️ CyberAI Private Mentor")
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
-# 4. Defensive Cybersecurity System Prompt
-system_message = {
-    'role': 'system',
-    'content': (
-        "You are an expert Defensive Cyber Security Mentor. Your primary mission is to educate users "
-        "on how to identify, mitigate, and defend against various cyber threats. "
-        "When a user asks about an attack vector, follow this structure: "
-        "1. Briefly explain the concept of the attack. "
-        "2. Provide a detailed step-by-step defense strategy. "
-        "3. Recommend specific security tools (like Wireshark, Nmap, or Firewalls). "
-        "Always maintain a professional, educational, and ethical tone."
-    )
-}
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
 
-# 5. User Input Section
-user_input = st.chat_input("Ask me about cyber defense (e.g., How to stop Brute Force?)")
-
-if user_input:
-    # Display user's question
+if prompt := st.chat_input("Ask your cybersecurity doubts here..."):
+    st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
-        st.write(user_input)
+        st.markdown(prompt)
 
-    # 6. Fetch Response from Ollama
-    try:
-        with st.spinner("Analyzing threat and finding defense..."):
-            response = ollama.chat(model='gemma:2b', messages=[
-                system_message,
-                {'role': 'user', 'content': user_input}
-            ])
-
-            # Display AI's defense advice
-            with st.chat_message("assistant"):
-                st.write(response['message']['content'])
-
-    except Exception as e:
-        st.error(f"Error: {e}. Please ensure Ollama is running and 'gemma:2b' is installed.")
+    with st.chat_message("assistant"):
+        response = client.chat.completions.create(
+            model="llama3-8b-8192",
+            messages=st.session_state.messages
+        )
+        reply = response.choices[0].message.content
+        st.markdown(reply)
+        st.session_state.messages.append({"role": "assistant", "content": reply})
