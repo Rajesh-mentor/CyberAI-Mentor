@@ -2,7 +2,7 @@ import streamlit as st
 from groq import Groq
 
 # Set up API Key (You can get this for free from groq.com)
-client = Groq(api_key="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")
+client = Groq(api_key="YOUR_GROQ_API_KEY_HERE")
 
 st.title("CyberAI Mentor 🛡️")
 
@@ -26,4 +26,5 @@ if prompt := st.chat_input("Ask your cybersecurity doubts here..."):
         reply = response.choices[0].message.content
         st.markdown(reply)
         st.session_state.messages.append({"role": "assistant", "content": reply})
+
 
