@@ -31,7 +31,7 @@ if picture:
     st.info("Analyzing image for potential security threats... Please wait.")
     
     try:
-        # Using the stable vision model: llama-3.2-11b-vision-instant
+        # UPDATED MODEL NAME: llama-3.2-11b-vision-instant
         chat_completion = client.chat.completions.create(
             model="llama-3.2-11b-vision-instant",
             messages=[
@@ -73,7 +73,6 @@ if prompt := st.chat_input("Ask your cybersecurity questions here..."):
             st.session_state.messages.append({"role": "assistant", "content": reply})
     except Exception as e:
         st.error(f"Chat System Error: {e}")
-
 
 
 
