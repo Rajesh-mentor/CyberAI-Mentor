@@ -31,9 +31,9 @@ if picture:
     st.info("Analyzing image for potential security threats... Please wait.")
     
     try:
-        # UPDATED TO PRODUCTION MODEL: llama-3.2-11b-vision-instant
+        # Switching back to preview model which often has wider access
         chat_completion = client.chat.completions.create(
-            model="llama-3.2-11b-vision-instant",
+            model="llama-3.2-11b-vision-preview",
             messages=[
                 {
                     "role": "user",
@@ -54,6 +54,7 @@ if picture:
             st.markdown(analysis_result)
             st.session_state.messages.append({"role": "assistant", "content": f"Analysis: {analysis_result}"})
     except Exception as e:
+        # Showing the exact error to help identify the available model
         st.error(f"Vision System Error: {str(e)}")
 
 # Main Chat Input
