@@ -31,9 +31,9 @@ if picture:
     st.info("Analyzing image for potential security threats... Please wait.")
     
     try:
-        # Using Llama 3.2 11B Vision Preview - Check if this is active in your Groq console
+        # UPDATED TO PRODUCTION MODEL: llama-3.2-11b-vision-instant
         chat_completion = client.chat.completions.create(
-            model="llama-3.2-11b-vision-preview",
+            model="llama-3.2-11b-vision-instant",
             messages=[
                 {
                     "role": "user",
@@ -54,9 +54,7 @@ if picture:
             st.markdown(analysis_result)
             st.session_state.messages.append({"role": "assistant", "content": f"Analysis: {analysis_result}"})
     except Exception as e:
-        # Improved error display to help us debug better
         st.error(f"Vision System Error: {str(e)}")
-        st.warning("Tip: Please check if 'llama-3.2-11b-vision-preview' is available in your Groq Playground.")
 
 # Main Chat Input
 if prompt := st.chat_input("Ask your cybersecurity questions here..."):
