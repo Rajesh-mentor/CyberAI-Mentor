@@ -23,7 +23,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Image Analysis Logic - FIXED MODEL NAME
+# Image Analysis Logic
 if picture:
     bytes_data = picture.getvalue()
     base64_image = base64.b64encode(bytes_data).decode('utf-8')
@@ -31,9 +31,9 @@ if picture:
     st.info("Analyzing image for potential security threats... Please wait.")
     
     try:
-        # UPDATED MODEL NAME: llama-3.2-11b-vision-instant
+        # UPDATED TO STABLE MODEL: llama-3.2-90b-vision-instant
         chat_completion = client.chat.completions.create(
-            model="llama-3.2-11b-vision-instant",
+            model="llama-3.2-90b-vision-instant",
             messages=[
                 {
                     "role": "user",
@@ -73,6 +73,7 @@ if prompt := st.chat_input("Ask your cybersecurity questions here..."):
             st.session_state.messages.append({"role": "assistant", "content": reply})
     except Exception as e:
         st.error(f"Chat System Error: {e}")
+
 
 
 
