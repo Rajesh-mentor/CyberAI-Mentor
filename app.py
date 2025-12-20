@@ -3,7 +3,7 @@ from groq import Groq
 import base64
 
 # API Key configuration
-client = Groq(api_key="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")
+client = Groq(api_key="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")
 
 st.title("CyberAI Mentor 🛡️")
 
@@ -71,5 +71,6 @@ if prompt := st.chat_input("Ask your cybersecurity doubts here..."):
             st.session_state.messages.append({"role": "assistant", "content": reply})
     except Exception as e:
         st.error(f"Chat Error: {e}")
+
 
 
