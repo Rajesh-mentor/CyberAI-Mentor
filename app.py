@@ -3,7 +3,7 @@ from groq import Groq
 import base64
 
 # API Key configuration
-client = Groq(api_key="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")
+client = Groq(api_key="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")
 
 st.title("CyberAI Mentor 🛡️")
 
@@ -20,18 +20,17 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Image Analysis Logic
+# Image Analysis Logic using llama-3.2-11b-vision-instant
 if picture:
-    # Convert image to base64
     bytes_data = picture.getvalue()
     base64_image = base64.b64encode(bytes_data).decode('utf-8')
     
     st.info("Analyzing image for security threats...")
     
     try:
-        # Using Llama 3.2 Vision model to analyze image
+        # Updated model name here
         chat_completion = client.chat.completions.create(
-            model="llama-3.2-11b-vision-preview",
+            model="llama-3.2-11b-vision-instant",
             messages=[
                 {
                     "role": "user",
