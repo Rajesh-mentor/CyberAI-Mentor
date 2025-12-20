@@ -23,7 +23,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Image Analysis Logic - USING STABLE MODEL
+# Image Analysis Logic
 if picture:
     bytes_data = picture.getvalue()
     base64_image = base64.b64encode(bytes_data).decode('utf-8')
@@ -31,14 +31,14 @@ if picture:
     st.info("Analyzing image for potential security threats... Please wait.")
     
     try:
-        # Using the currently most stable vision model
+        # Using Llama 3.2 11B Vision Preview - Check if this is active in your Groq console
         chat_completion = client.chat.completions.create(
             model="llama-3.2-11b-vision-preview",
             messages=[
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "Analyze this image for any cybersecurity threats like phishing links, scams, or malicious content. Provide a clear warning if dangerous."},
+                        {"type": "text", "text": "Analyze this image for any cybersecurity threats like phishing links or scams. Explain clearly in English."},
                         {
                             "type": "image_url",
                             "image_url": {
@@ -52,9 +52,11 @@ if picture:
         analysis_result = chat_completion.choices[0].message.content
         with st.chat_message("assistant"):
             st.markdown(analysis_result)
-            st.session_state.messages.append({"role": "assistant", "content": f"Image Analysis Result: {analysis_result}"})
+            st.session_state.messages.append({"role": "assistant", "content": f"Analysis: {analysis_result}"})
     except Exception as e:
-        st.error(f"Vision Analysis Error: {e}")
+        # Improved error display to help us debug better
+        st.error(f"Vision System Error: {str(e)}")
+        st.warning("Tip: Please check if 'llama-3.2-11b-vision-preview' is available in your Groq Playground.")
 
 # Main Chat Input
 if prompt := st.chat_input("Ask your cybersecurity questions here..."):
@@ -72,10 +74,7 @@ if prompt := st.chat_input("Ask your cybersecurity questions here..."):
             st.markdown(reply)
             st.session_state.messages.append({"role": "assistant", "content": reply})
     except Exception as e:
-        st.error(f"Chat System Error: {e}")
-
-
-
+        st.error(f"Chat System Error: {str(e)}")
 
 
 
