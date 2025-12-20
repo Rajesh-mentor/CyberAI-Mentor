@@ -3,8 +3,9 @@ from groq import Groq
 import base64
 
 # API Key configuration
-client = Groq(api_key="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")
+client = Groq(api_key="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")
 
+st.set_page_config(page_title="CyberAI Mentor", page_icon="🛡️")
 st.title("CyberAI Mentor 🛡️")
 
 # Sidebar for Camera
@@ -20,7 +21,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Image Analysis Logic using llama-3.2-90b-vision-preview
+# Image Analysis Logic using llama-3.2-90b-vision-instant
 if picture:
     bytes_data = picture.getvalue()
     base64_image = base64.b64encode(bytes_data).decode('utf-8')
@@ -28,9 +29,9 @@ if picture:
     st.info("Analyzing image for security threats...")
     
     try:
-        # Corrected model name: llama-3.2-90b-vision-preview
+        # Updated to the current stable vision model
         chat_completion = client.chat.completions.create(
-            model="llama-3.2-90b-vision-preview",
+            model="llama-3.2-90b-vision-instant",
             messages=[
                 {
                     "role": "user",
@@ -70,6 +71,7 @@ if prompt := st.chat_input("Ask your cybersecurity doubts here..."):
             st.session_state.messages.append({"role": "assistant", "content": reply})
     except Exception as e:
         st.error(f"Chat Error: {e}")
+
 
 
 
