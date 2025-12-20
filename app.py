@@ -3,7 +3,7 @@ from groq import Groq
 import base64
 
 # API Key configuration
-client = Groq(api_key="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")
+client = Groq(api_key="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")
 
 st.set_page_config(page_title="CyberAI Mentor", page_icon="🛡️")
 st.title("CyberAI Mentor 🛡️")
@@ -21,7 +21,7 @@ for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Image Analysis Logic using llama-3.2-90b-vision-instant
+# Image Analysis Logic 
 if picture:
     bytes_data = picture.getvalue()
     base64_image = base64.b64encode(bytes_data).decode('utf-8')
@@ -29,14 +29,14 @@ if picture:
     st.info("Analyzing image for security threats...")
     
     try:
-        # Updated to the current stable vision model
+        # Using the current active vision model
         chat_completion = client.chat.completions.create(
-            model="llama-3.2-90b-vision-instant",
+            model="llama-3.2-11b-vision-preview",
             messages=[
                 {
                     "role": "user",
                     "content": [
-                        {"type": "text", "text": "Analyze this image for any cybersecurity threats like phishing links or suspicious messages. Explain clearly."},
+                        {"type": "text", "text": "Identify any cybersecurity threats like phishing links, scams, or suspicious text in this image. Explain why it might be dangerous."},
                         {
                             "type": "image_url",
                             "image_url": {
@@ -71,6 +71,7 @@ if prompt := st.chat_input("Ask your cybersecurity doubts here..."):
             st.session_state.messages.append({"role": "assistant", "content": reply})
     except Exception as e:
         st.error(f"Chat Error: {e}")
+
 
 
 
