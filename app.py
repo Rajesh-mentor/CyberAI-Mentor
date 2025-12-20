@@ -33,7 +33,7 @@ if picture:
     try:
         # Switching back to preview model which often has wider access
         chat_completion = client.chat.completions.create(
-            model="llava-v1.5-7b-4096-preview",
+            model="llama-3.2-11b-vision-preview",
             messages=[
                 {
                     "role": "user",
@@ -74,6 +74,7 @@ if prompt := st.chat_input("Ask your cybersecurity questions here..."):
             st.session_state.messages.append({"role": "assistant", "content": reply})
     except Exception as e:
         st.error(f"Chat System Error: {str(e)}")
+
 
 
 
